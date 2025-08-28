@@ -1,0 +1,10 @@
+name: go2ecowatch
+
+services:
+  adapter:
+    build: .
+    environment:
+      G2E_HOST: ${G2E_HOST}
+      G2E_PORT: ${G2E_PORTS}
+      G2E_USER: ${G2E_USER}
+      G2E_PASSWORD: ${G2E_PASSWORD}
