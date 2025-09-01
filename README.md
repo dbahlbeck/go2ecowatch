@@ -1,6 +1,6 @@
 ![image >](assets/logo.png)
 
-# ha2ecowatch
+# go2ecowatch
 
 This is a simple Go app that adapts the EcoWatch MQTT API to a simpler MQTT interface more suitable for automation products.
 
@@ -33,6 +33,8 @@ If you are using [Runtipi](https://runtipi.io/), then you could just add my AppS
 When you have the server running, try pushing an int (0 - 100) to the topic `/go2ecowatch/inner/progressbar`
 
 ## Configuration
+
+For this to work, you must have configured your EcoWatch to connect to your MQTT server. Go to the source to learn how to do that: [Waltrix support](https://waltrix.se/sv/pages/support)
 
 ### Environment variables
 
