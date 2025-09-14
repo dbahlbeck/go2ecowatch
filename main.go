@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var progressBarTopic = "/go2ecowatch/inner/progressbar"
+var progressBarTopic = "go2ecowatch/inner/progressbar"
 
 func innerRingTopic(id string) string {
 	return fmt.Sprintf("ecowatch/%v/set/pixels", id)
@@ -25,8 +25,8 @@ func pixelSliceToMessage(pSlice []Pixel) []byte {
 
 }
 
-func publishInnerErrorRing(client mqtt.Client) {
-	topic := innerRingTopic("c035647a9834")
+func publishInnerErrorRing(client mqtt.Client, ecoWatchId string) {
+	topic := innerRingTopic(ecoWatchId)
 	errorRing := pixelSliceToMessage(MakePixelSlice(&V{255, 0, 0}, 24))
 	client.Publish(topic, 0, false, errorRing)
 }
