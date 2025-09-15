@@ -28,8 +28,8 @@ func getProgressBarListener(ecoWatchId string) func(mqtt.Client, mqtt.Message) {
 		}
 
 		msgToPublish := pixelSliceToMessage(ring)
-		log.Println("Publishing progress bar status")
-		client.Publish(innerRingTopic(ecoWatchId), 0, false, msgToPublish)
-
+		topic := innerRingTopic(ecoWatchId)
+		log.Printf("Publishing progress bar status to %v\n", topic)
+		client.Publish(topic, 0, false, msgToPublish)
 	}
 }
