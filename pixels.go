@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 )
 
 type Pixel map[string]string
@@ -11,8 +10,8 @@ type EcowatchMessage struct {
 	Inner []Pixel `json:"inner"`
 }
 
-// MakePixelSlice Produces a slice of vectors filled with a single vector
-func MakePixelSlice(color *V, length int) []Pixel {
+// SingleColourPixelSlice Produces a slice of vectors filled with a single vector
+func SingleColourPixelSlice(color *V, length int) []Pixel {
 	slice := make([]Pixel, 0)
 	for i := range length {
 		pixel := Pixel{fmt.Sprintf("%02d", i): color.ToInt().ToHex()}
@@ -21,7 +20,7 @@ func MakePixelSlice(color *V, length int) []Pixel {
 	return slice
 }
 
-func MakeGradientPixelSlice(startColour *V, endColour *V, length int) ([]Pixel, error) {
+func GradientPixelSlice(startColour *V, endColour *V, length int) ([]Pixel, error) {
 	slice := make([]Pixel, 0)
 	gradient, err := startColour.IntInterpolate(endColour, length)
 	if err != nil {
@@ -35,11 +34,10 @@ func MakeGradientPixelSlice(startColour *V, endColour *V, length int) ([]Pixel, 
 	return slice, nil
 }
 
-func MakeGradientProgressBar(startColour *V, endColour *V, length int, percent int) ([]Pixel, error) {
-	slice, err := MakeGradientPixelSlice(startColour, endColour, length)
+func GradientPixelSliceProgress(startColour *V, endColour *V, length int, percent int) ([]Pixel, error) {
+	slice, err := GradientPixelSlice(startColour, endColour, length)
 	if err != nil {
-		log.Println("couldn't build gradient: %w", err)
-		return nil, err
+		return nil, fmt.Errorf("couldn't build gradient: %w", err)
 	}
 
 	numberOfPixelsToBlank := (float64(percent) / float64(100.0)) * float64(length)

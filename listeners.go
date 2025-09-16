@@ -22,8 +22,9 @@ func getProgressBarListener(ecoWatchId string) func(mqtt.Client, mqtt.Message) {
 		}
 
 		numberOfPixels := 24
-		ring, err := MakeGradientProgressBar(&V{255, 0, 0}, &V{0, 255, 0}, numberOfPixels, percent)
+		ring, err := GradientPixelSliceProgress(&V{255, 0, 0}, &V{0, 255, 0}, numberOfPixels, percent)
 		if err != nil {
+			log.Printf("Could not generate progress bar:%v", err)
 			publishInnerErrorRing(client, ecoWatchId)
 		}
 

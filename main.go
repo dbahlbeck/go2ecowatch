@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// d
 var progressBarTopic = "go2ecowatch/inner/progressbar"
 
 func innerRingTopic(id string) string {
@@ -27,7 +28,7 @@ func pixelSliceToMessage(pSlice []Pixel) []byte {
 
 func publishInnerErrorRing(client mqtt.Client, ecoWatchId string) {
 	topic := innerRingTopic(ecoWatchId)
-	errorRing := pixelSliceToMessage(MakePixelSlice(&V{255, 0, 0}, 24))
+	errorRing := pixelSliceToMessage(SingleColourPixelSlice(&V{255, 0, 0}, 24))
 	client.Publish(topic, 0, false, errorRing)
 }
 
@@ -88,5 +89,3 @@ func main() {
 
 	select {}
 }
-
-// Config file found and successfully parsed

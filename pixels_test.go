@@ -22,13 +22,13 @@ func TestMarshalEcowatchMessage(t *testing.T) {
 }
 
 func TestMakePixelSlice(t *testing.T) {
-	pSlice := MakePixelSlice(&V{255, 0, 0}, 5)
+	pSlice := SingleColourPixelSlice(&V{255, 0, 0}, 5)
 	print(json.Marshal(pSlice))
 }
 
 func TestMakeEcowatchMessage(t *testing.T) {
 	m := EcowatchMessage{
-		Inner: MakePixelSlice(&V{255, 0, 0}, 5),
+		Inner: SingleColourPixelSlice(&V{255, 0, 0}, 5),
 	}
 
 	marshalledMessage, _ := json.Marshal(m)
@@ -39,13 +39,13 @@ func TestMakeEcowatchMessage(t *testing.T) {
 }
 
 func TestMakeGradientPixelSliceWithTwoColours(t *testing.T) {
-	g, err := MakeGradientPixelSlice(&V{x: 0, y: 0, z: 0}, &V{x: 0, y: 0, z: 1}, 2)
+	g, err := GradientPixelSlice(&V{x: 0, y: 0, z: 0}, &V{x: 0, y: 0, z: 1}, 2)
 	assert.Nil(t, err)
 	assert.Equal(t, []Pixel{{"00": "#000000"}, {"01": "#000001"}}, g)
 }
 
 func TestMakeGradientPixelSliceWithManyColours(t *testing.T) {
-	g, err := MakeGradientPixelSlice(&V{x: 0, y: 0, z: 0}, &V{x: 0, y: 0, z: 5}, 5)
+	g, err := GradientPixelSlice(&V{x: 0, y: 0, z: 0}, &V{x: 0, y: 0, z: 5}, 5)
 	assert.Nil(t, err)
 	assert.Equal(t, []Pixel{
 		{"00": "#000000"},
@@ -56,8 +56,8 @@ func TestMakeGradientPixelSliceWithManyColours(t *testing.T) {
 	}, g)
 }
 
-func TestMakeGradientProgressBar(t *testing.T) {
-	g, err := MakeGradientProgressBar(&V{x: 0, y: 0, z: 0}, &V{x: 0, y: 0, z: 5}, 5, 50)
+func TestGradientPixelSliceProgress(t *testing.T) {
+	g, err := GradientPixelSliceProgress(&V{x: 0, y: 0, z: 0}, &V{x: 0, y: 0, z: 5}, 5, 50)
 	assert.Nil(t, err)
 	assert.Equal(t, []Pixel{
 		{"00": "#000000"},
@@ -69,7 +69,7 @@ func TestMakeGradientProgressBar(t *testing.T) {
 }
 
 func TestMakeGradientProgressBarError(t *testing.T) {
-	_, err := MakeGradientProgressBar(&V{x: 0, y: 0, z: 0}, &V{x: 0, y: 0, z: 5}, 1, 50)
+	_, err := GradientPixelSliceProgress(&V{x: 0, y: 0, z: 0}, &V{x: 0, y: 0, z: 5}, 1, 50)
 	assert.ErrorContains(t, err, "need at least 2 steps")
 
 }
