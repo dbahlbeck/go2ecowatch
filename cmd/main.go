@@ -1,36 +1,16 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 
+	"github.com/dbahlbeck/go2ecowatch/internal"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/spf13/viper"
 )
 
-// d
 var progressBarTopic = "go2ecowatch/inner/progressbar"
-
-func innerRingTopic(id string) string {
-	return fmt.Sprintf("ecowatch/%v/set/pixels", id)
-}
-
-func pixelSliceToMessage(pSlice []Pixel) []byte {
-	message := EcowatchMessage{
-		Inner: pSlice,
-	}
-	jsonData, _ := json.Marshal(message)
-	return jsonData
-
-}
-
-func publishInnerErrorRing(client mqtt.Client, ecoWatchId string) {
-	topic := innerRingTopic(ecoWatchId)
-	errorRing := pixelSliceToMessage(SingleColourPixelSlice(&V{255, 0, 0}, 24))
-	client.Publish(topic, 0, false, errorRing)
-}
 
 var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
 	fmt.Println("Connected")
@@ -83,7 +63,7 @@ func main() {
 
 	subscribeTopic := fmt.Sprintf("%v", progressBarTopic)
 	log.Printf("Subscribing to %v", subscribeTopic)
-	if token := client.Subscribe(subscribeTopic, 1, getProgressBarListener(ecowatchId)); token.Wait() && token.Error() != nil {
+	if token := client.Subscribe(subscribeTopic, 1, internal.GetProgressBarListener(ecowatchId)); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
 

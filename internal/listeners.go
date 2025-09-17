@@ -1,13 +1,34 @@
-package main
+package internal
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"strconv"
 
 	"github.com/eclipse/paho.mqtt.golang"
 )
 
-func getProgressBarListener(ecoWatchId string) func(mqtt.Client, mqtt.Message) {
+func innerRingTopic(id string) string {
+	return fmt.Sprintf("ecowatch/%v/set/pixels", id)
+}
+
+func pixelSliceToMessage(pSlice []Pixel) []byte {
+	message := EcowatchMessage{
+		Inner: pSlice,
+	}
+	jsonData, _ := json.Marshal(message)
+	return jsonData
+
+}
+
+func publishInnerErrorRing(client mqtt.Client, ecoWatchId string) {
+	topic := innerRingTopic(ecoWatchId)
+	errorRing := pixelSliceToMessage(SingleColourPixelSlice(&V{255, 0, 0}, 24))
+	client.Publish(topic, 0, false, errorRing)
+}
+
+func GetProgressBarListener(ecoWatchId string) func(mqtt.Client, mqtt.Message) {
 	return func(client mqtt.Client, message mqtt.Message) {
 		percent, err := strconv.Atoi(string(message.Payload()))
 		if err != nil {
