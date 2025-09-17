@@ -22,11 +22,11 @@ func init() {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("$HOME/.config/go2ecowatch")
-	viper.BindEnv("HOST")
-	viper.BindEnv("PORT")
-	viper.BindEnv("USER")
-	viper.BindEnv("PASSWORD")
-	viper.BindEnv("ECOWATCH_ID")
+	viper.MustBindEnv("HOST")
+	viper.MustBindEnv("PORT")
+	viper.MustBindEnv("USER")
+	viper.MustBindEnv("PASSWORD")
+	viper.MustBindEnv("ECOWATCH_ID")
 
 }
 
