@@ -1,11 +1,14 @@
 FROM golang:1.25.0-alpine as build-stage
 WORKDIR /app
+RUN pwd
 COPY go.mod go.sum ./
-COPY *.go ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o /go2ecowatch
+COPY internal/ ./internal
+COPY cmd/ ./cmd
+
+RUN CGO_ENABLED=0 GOOS=linux go build ./cmd/go2ecowatch.go
 
 FROM build-stage
 WORKDIR /
-COPY --from=build-stage /go2ecowatch /go2ecowatch
+COPY --from=build-stage /app/go2ecowatch /go2ecowatch
 
 ENTRYPOINT ["/go2ecowatch"]
