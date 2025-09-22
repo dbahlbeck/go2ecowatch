@@ -58,7 +58,7 @@ ecowatch_id: <EcoWatch ID>
 
 ## Topics
 
-### /go2ecowatch/inner/progressbar
+### go2ecowatch/inner/progressbar
 
 Post a plain integer value to this topic to set a red to green gradient progress ring on the inner ring of the clock. The
 adapted value (a JSON object) will be posted to `ecowatch/<ID>/set/pixels`
