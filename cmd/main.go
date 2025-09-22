@@ -6,15 +6,10 @@ import (
 	"log"
 
 	"github.com/dbahlbeck/go2ecowatch/internal"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/spf13/viper"
 )
 
 var progressBarTopic = "go2ecowatch/inner/progressbar"
-
-var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
-	fmt.Println("Connected")
-}
 
 func init() {
 	viper.SetEnvPrefix("G2E")
@@ -48,14 +43,8 @@ func main() {
 
 	fmt.Println(connectionString)
 
-	opts := mqtt.NewClientOptions().
-		SetUsername(username).
-		SetPassword(password).
-		AddBroker(connectionString).
-		SetAutoReconnect(true)
-	opts.OnConnect = connectHandler
-
-	client := mqtt.NewClient(opts)
+	f := internal.DefaultMqttClientFactory{}
+	client := f.CreateClient(username, password, connectionString)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
